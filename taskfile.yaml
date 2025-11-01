@@ -1,0 +1,6 @@
+version: "3"
+
+tasks:
+  run:
+    silent: true
+    cmd: .venv/bin/python main.py

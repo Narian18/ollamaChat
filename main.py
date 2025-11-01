@@ -1,7 +1,9 @@
+import os
 from datetime import datetime
-from typing import Generator
 
 from ollama import chat
+from rich.live import Live
+from rich.markdown import Markdown
 
 MODEL = "gemma3"
 error_response = "Something went wrong while answering your question. Maybe try again?"
@@ -13,7 +15,7 @@ def _short_time() -> str:
     return datetime.now().replace(microsecond=0).isoformat()
 
 
-def _chat_stream(question: str, messages: MessageType) -> Generator[str | None]:
+def _chat_stream(question: str, messages: MessageType):
     messages.append({"role": "user", "content": question})
 
     for chunk in chat(model=MODEL, messages=messages, stream=True):
@@ -49,6 +51,8 @@ def _dump_chat(messages: MessageType):
 
 
 if __name__ == "__main__":
+    os.mkdir("chats")
+
     opener = "Ask gemma anything!"
     print(f"{opener}\n{'=' * len(opener)}\n")
 
@@ -60,15 +64,18 @@ if __name__ == "__main__":
                 print()
                 continue
 
-            reply = ""
-            for chunk in _chat_stream(request, messages):
-                reply += chunk or ""
-                print(chunk, end="", flush=True)
             print()
+            reply = ""
+            with Live(refresh_per_second=10) as live:
+                for chunk in _chat_stream(request, messages):
+                    reply += chunk or ""
+                    live.update(Markdown(reply))
 
             if not reply:
                 print(error_response)
                 continue
+
+            print()
     except (KeyboardInterrupt, Exception) as e:
         if isinstance(e, KeyboardInterrupt):
             print("\nChat exited. Goodbye!\n")
