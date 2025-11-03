@@ -11,6 +11,13 @@ error_response = "Something went wrong while answering your question. Maybe try 
 MessageType = list[dict[str, str]]
 
 
+def _init():
+    try:
+        os.mkdir("chats")
+    except FileExistsError:
+        pass
+
+
 def _short_time() -> str:
     return datetime.now().replace(microsecond=0).isoformat()
 
@@ -51,9 +58,9 @@ def _dump_chat(messages: MessageType):
 
 
 if __name__ == "__main__":
-    os.mkdir("chats")
+    _init()
 
-    opener = "Ask gemma anything!"
+    opener = f"Ask {MODEL} anything!"
     print(f"{opener}\n{'=' * len(opener)}\n")
 
     messages = []
