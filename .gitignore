@@ -1,4 +1,5 @@
-.venv/
+.venv
 __pycache__
-chats/
+chats
 .tool-versions
+kb
