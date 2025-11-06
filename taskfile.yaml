@@ -1,6 +1,13 @@
 version: "3"
 
 tasks:
-  run:
+  chatbot:
     silent: true
-    cmd: .venv/bin/python main.py
+    cmd: .venv/bin/python chatbot.py
+  setup-kb:
+    silent: true
+    cmd: .venv/bin/python setup.py
+  rustbot:
+    silent: true
+    cmd: .venv/bin/python rustbot.py
+

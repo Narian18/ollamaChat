@@ -1,9 +1,9 @@
-from ollama import chat
-
 from datetime import datetime
 
+from ollama import chat
 
-MODEL = "gemma3"
+from config import config
+
 
 MessageType = list[dict[str, str]]
 
@@ -15,19 +15,15 @@ def _short_time() -> str:
 def chat_stream(question: str, messages: MessageType):
     messages.append({"role": "user", "content": question})
 
-    for chunk in chat(model=MODEL, messages=messages, stream=True):
+    for chunk in chat(model=config.model, messages=messages, stream=True):
         yield chunk.message.content
 
 
 def chat_synchronous(question: str, messages: MessageType) -> str | None:
     messages.append({"role": "user", "content": question})
 
-    response = chat(model=MODEL, messages=messages)
+    response = chat(model=config.model, messages=messages)
     response = response.message.content
-    if not response:
-        return
-    else:
-        messages.append({"role": "assistant", "content": response})
 
     return response
 

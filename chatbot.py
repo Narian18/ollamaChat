@@ -3,7 +3,8 @@ import os
 from rich.live import Live
 from rich.markdown import Markdown
 
-from chat import MODEL, MessageType, chat_stream, dump_chat
+from core.chat import MessageType, chat_stream, dump_chat
+from config import config
 
 error_response = "Something went wrong while answering your question. Maybe try again?"
 
@@ -28,7 +29,7 @@ def _handle_chat_stream(prompt: str, messages: MessageType) -> str:
 
 
 def _chat_loop(messages: MessageType):
-    opener = f"Ask {MODEL} anything!"
+    opener = f"Ask {config.model} anything!"
     print(f"{opener}\n{'=' * len(opener)}\n")
 
     while True:

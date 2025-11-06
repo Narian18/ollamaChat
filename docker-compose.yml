@@ -1,0 +1,20 @@
+services:
+  db:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8999"
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    environment:
+      - DISABLE_SECURITY_PLUGIN=true
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Default123!
+      - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"  # limit the JVM heap size. Apparently very RAM-hungry
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
